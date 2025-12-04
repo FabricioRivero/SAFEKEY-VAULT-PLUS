@@ -1,0 +1,7 @@
+[Op #1] Creada contraseña maestra inicial.
+[Op #2] Acceso autorizado con master password.
+[Op #3] Añadida contraseña para '1'.
+[Op #4] Consultada contraseña de '1'.
+[Op #5] Editada contraseña para '1'.
+[Op #6] Eliminada contraseña para '1'.
+[Op #7] Generada contraseña segura.

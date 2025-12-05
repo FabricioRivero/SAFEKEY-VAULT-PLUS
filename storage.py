@@ -36,3 +36,4 @@ def guardar_registros(registros):
             f.write(
                 f"{r['servicio']}|{r['usuario']}|{r['contraseña']}|{r['metodo']}|{r['fecha']}\n"
             )
+            

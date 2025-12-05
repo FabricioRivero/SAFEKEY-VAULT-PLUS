@@ -43,4 +43,4 @@ def verificar_master(master_guardada):
             intentos += 1
     print("❌ Demasiados intentos. Sistema bloqueado.")
     registrar_accion("Sistema bloqueado por intentos fallidos.")
-    return False
+    return False 

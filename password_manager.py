@@ -1,5 +1,12 @@
+# ============================================================
 # password_manager.py
-# Agregar, listar, mostrar, editar y eliminar contraseñas
+# Módulo de GESTIÓN de contraseñas (CRUD):
+# - Listar
+# - Agregar
+# - Consultar
+# - Editar
+# - Eliminar
+# ============================================================
 
 import time
 from crypto import cifrar_cesar, cifrar_recursivo, descifrar_cesar, descifrar_recursivo
@@ -9,10 +16,17 @@ from log import registrar_accion
 
 
 def fecha_simulada():
+    """
+    Genera una cadena de fecha y hora actual en formato YYYY-MM-DD HH:MM:SS.
+    Se usa como fecha de registro de la contraseña.
+    """
     return time.strftime("%Y-%m-%d %H:%M:%S")
 
 
 def listar_servicios(registros):
+    """
+    Muestra en pantalla todos los servicios almacenados con su índice.
+    """
     if not registros:
         print("No hay registros.")
         return
@@ -22,13 +36,22 @@ def listar_servicios(registros):
 
 
 def agregar_password(registros):
+    """
+    Agrega una nueva contraseña al sistema:
+    - Pide servicio, usuario y contraseña.
+    - Evalúa la fuerza de la contraseña.
+    - Permite elegir el método de cifrado.
+    - Guarda el registro en memoria y en archivo.
+    """
     servicio = input("Servicio: ")
     usuario = input("Usuario/correo: ")
     pwd = input("Contraseña (en texto): ")
 
+    # Analizar fuerza de la contraseña
     fuerza = evaluar_fuerza(pwd)
     print(f"Fuerza estimada: {fuerza}")
 
+    # Elegir método de cifrado
     print("Método de cifrado:")
     print("1) César")
     print("2) Recursivo (inversión + César)")
@@ -48,6 +71,7 @@ def agregar_password(registros):
         pwd_cifrada = cifrar_recursivo(pwd)
         metodo = "REC"
 
+    # Crear registro en formato diccionario
     registro = {
         "servicio": servicio,
         "usuario": usuario,
@@ -55,12 +79,18 @@ def agregar_password(registros):
         "metodo": metodo,
         "fecha": fecha_simulada(),
     }
+
+    # Guardar en la lista y en el archivo
     registros.append(registro)
     guardar_registros(registros)
     registrar_accion(f"Añadida contraseña para '{servicio}'.")
 
 
 def mostrar_password(registros):
+    """
+    Permite seleccionar un registro y mostrar sus datos.
+    Opcionalmente, puede mostrar la contraseña DESCIFRADA.
+    """
     if not registros:
         print("No hay registros.")
         return
@@ -89,11 +119,16 @@ def mostrar_password(registros):
             original = descifrar_recursivo(r["contraseña"])
         else:
             original = "(método desconocido)"
+
         print(f"Contraseña: {original}")
         registrar_accion(f"Consultada contraseña de '{r['servicio']}'.")
 
 
 def editar_password(registros):
+    """
+    Permite modificar la contraseña y el método de cifrado
+    de un registro ya existente.
+    """
     if not registros:
         print("No hay registros.")
         return
@@ -140,6 +175,9 @@ def editar_password(registros):
 
 
 def eliminar_password(registros):
+    """
+    Elimina un registro (servicio) seleccionado por índice.
+    """
     if not registros:
         print("No hay registros.")
         return

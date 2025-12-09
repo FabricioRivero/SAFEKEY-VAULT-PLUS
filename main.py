@@ -1,5 +1,9 @@
+# ============================================================
 # main.py
-# Punto de entrada de SAFEKEY VAULT+
+# Punto de entrada de SAFEKEY VAULT+.
+# - Muestra el menú.
+# - Coordina la interacción con los demás módulos.
+# ============================================================
 
 import random
 
@@ -18,17 +22,27 @@ from log import registrar_accion
 
 
 def menu_principal():
+    """
+    Controla el flujo principal del programa:
+    - Verifica la master password.
+    - Carga los registros desde archivo.
+    - Muestra el menú y ejecuta la opción seleccionada.
+    """
     random.seed()
 
+    # 1) Cargar o inicializar contraseña maestra
     master_cifrada = cargar_master()
     if not master_cifrada:
         master_cifrada = inicializar_master()
 
+    # 2) Verificar acceso
     if not verificar_master(master_cifrada):
         return
 
+    # 3) Cargar registros desde archivo
     registros = cargar_registros()
 
+    # 4) Bucle principal del menú
     while True:
         print("\n===== SAFEKEY VAULT+ =====")
         print("1) Agregar nueva contraseña")
@@ -46,6 +60,7 @@ def menu_principal():
             print("Opción inválida.")
             continue
 
+        # Selección de opción
         if op == 1:
             agregar_password(registros)
         elif op == 2:
@@ -57,6 +72,7 @@ def menu_principal():
         elif op == 5:
             menu_buscador(registros)
         elif op == 6:
+            # Generador de contraseñas seguras
             try:
                 longitud = int(input("Longitud: "))
             except ValueError:
@@ -65,10 +81,12 @@ def menu_principal():
             usar_m = input("¿Incluir mayúsculas? (S/N): ").strip().lower() == "s"
             usar_n = input("¿Incluir números? (S/N): ").strip().lower() == "s"
             usar_s = input("¿Incluir símbolos? (S/N): ").strip().lower() == "s"
+
             pwd = generar_password(longitud, usar_m, usar_n, usar_s)
             print(f"Contraseña generada: {pwd}")
             registrar_accion("Generada contraseña segura.")
         elif op == 7:
+            # Revisión recursiva de integridad
             revisar_integridad_recursiva(registros, 0)
             print("Revisión de integridad completada. Revisa log.txt para detalles.")
         elif op == 8:
@@ -78,5 +96,6 @@ def menu_principal():
             print("Opción inválida.")
 
 
+# Punto de entrada del programa
 if __name__ == "__main__":
     menu_principal()
